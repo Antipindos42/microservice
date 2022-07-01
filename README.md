@@ -1,2 +1,1 @@
-# microservice
-k8s$docker
+https://hub.docker.com/repository/docker/antipindos42/pip-app

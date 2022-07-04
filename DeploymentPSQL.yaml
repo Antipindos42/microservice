@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+	metadata:
+  	labels:
+   	k8s-app: postgres
+	spec:
+  	containers:
+  	- name: postgres
+    	image: dr.xenonstack.com:5050/postgres:v10.13
+    	imagePullPolicy: "IfNotPresent"
+    	ports:
+    	- containerPort: 5432
+    	env:
+      - name: PASS
+        valueFrom:
+          secretKeyRef:
+            name: my-secret
+            key: POSTGRES_PASSWORD
+    	- name: POSTGRES_USER
+      	value: postgres
+    	- name: POSTGRES_PASSWORD
+      	value: superpostgres
+    	- name: PGDATA
+      	value: /var/lib/postgresql/data/pgdata
+    	volumeMounts:
+       	- mountPath: /var/lib/postgresql/data
+         	name: postgredb
+  	volumes:
+    	- name: postgredb
+        persistentVolumeClaim:
+          claimName: postgres

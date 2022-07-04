@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,17 +23,29 @@ spec:
         valueFrom:
           secretKeyRef:
             name: my-secret
-            key: POSTGRES_PASSWORD
-    	- name: POSTGRES_USER
+            key: superpostgres //создать секрет testpassword
+      - name: POSTGRES_USER
       	value: postgres
-    	- name: POSTGRES_PASSWORD
+      - name: POSTGRES_PASSWORD
       	value: superpostgres
-    	- name: PGDATA
+      - name: PGDATA
       	value: /var/lib/postgresql/data/pgdata
-    	volumeMounts:
-       	- mountPath: /var/lib/postgresql/data
-         	name: postgredb
+    	  volumeMounts:
+       	  - name: postgredb
+	    mountPath: /var/lib/postgresql/data
   	volumes:
     	- name: postgredb
         persistentVolumeClaim:
           claimName: postgres
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: posgres
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: csi-hdd-dp1???

@@ -19,15 +19,15 @@ spec:
     	ports:
     	- containerPort: 5432
     	env:
-      - name: PASS
+      - name: POSTGRES_PASSWORD
         valueFrom:
           secretKeyRef:
             name: my-secret
-            key: superpostgres //создать секрет testpassword
+            key: key1 //создать секрет testpassword
       - name: POSTGRES_USER
       	value: postgres
       - name: POSTGRES_PASSWORD
-      	value: superpostgres
+      	value: key1
       - name: PGDATA
       	value: /var/lib/postgresql/data/pgdata
     	  volumeMounts:
@@ -35,11 +35,11 @@ spec:
 	    mountPath: /var/lib/postgresql/data
   	volumes:
     	- name: postgredb
-        persistentVolumeClaim:
-          claimName: postgres
+          persistentVolumeClaim:
+            claimName: postgres
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
   name: posgres
 spec:
@@ -48,4 +48,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: csi-hdd-dp1???
+  storageClassName: ceph-hdd-ms1
+  
+

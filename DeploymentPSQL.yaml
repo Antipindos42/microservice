@@ -10,11 +10,11 @@ spec:
   template:
 	metadata:
   	labels:
-   	k8s-app: postgres
+   	my-bd-k8s: postgres
 	spec:
   	containers:
   	- name: postgres
-    	image: dr.xenonstack.com:5050/postgres:v10.13
+    	image: postgres:v10.13
     	imagePullPolicy: "IfNotPresent"
     	ports:
     	- containerPort: 5432

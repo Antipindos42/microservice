@@ -7,8 +7,13 @@ spec:
   replicas: 1
   strategy:
     type: Recreate
+  selector:
+    matchLabels:
+      app: my-bd
   template:
-  metadata:
+    metadata:
+      labels:
+        app: my-bd
   spec:
   containers:
     - name: postgres
@@ -48,3 +53,4 @@ spec:
     requests:
       storage: 10Gi
   storageClassName: ceph-hdd-ms1
+

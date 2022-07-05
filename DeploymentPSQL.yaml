@@ -23,7 +23,7 @@ spec:
         valueFrom:
           secretKeyRef:
             name: my-secret
-            key: key1 //создать секрет testpassword
+            key: key1
       - name: POSTGRES_USER
       	value: postgres
       - name: POSTGRES_PASSWORD

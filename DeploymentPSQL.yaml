@@ -8,35 +8,34 @@ spec:
   strategy:
     type: Recreate
   template:
-	metadata:
-  	labels:
-   	my-bd-k8s: postgres
-	spec:
-  	containers:
-  	- name: postgres
-    	image: postgres:10.13
-    	imagePullPolicy: "IfNotPresent"
-    	ports:
-    	- containerPort: 5432
-    	env:
-      - name: POSTGRES_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: my-secret
-            key: key1
-      - name: POSTGRES_USER
-      	value: postgres
-      - name: POSTGRES_PASSWORD
-      	value: key1
-      - name: PGDATA
-      	value: /var/lib/postgresql/data/pgdata
-    	  volumeMounts:
-       	  - name: postgredb
-	    mountPath: /var/lib/postgresql/data
-  	volumes:
-    	- name: postgredb
-          persistentVolumeClaim:
-            claimName: postgres
+  metadata:
+  spec:
+  containers:
+    - name: postgres
+      image: postgres:10.13
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+  env:
+    - name: PASS
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: key1
+    - name: POSTGRES_USER
+      value: postgres
+    - name: POSTGRES_PASSWORD
+      value: superpostgres
+    - name: PGDATA
+      value: /var/lib/postgresql/data/pgdata
+      volumeMounts:
+        - name: postgredb
+          mountPath: /var/lib/postgresql/data
+          volumes:
+            - name: postgredb
+              persistentVolumeClaim:
+                claimName: postgres
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -44,10 +43,8 @@ metadata:
   name: posgres
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
   storageClassName: ceph-hdd-ms1
-  
-

@@ -6,7 +6,9 @@ metadata:
 spec:
   ports:
   - port: 5432
-    targetPort: 80
+    targetPort: 3000
   selector:
-    app: my-app-redmine
+    app: redmine3
   type: ClusterIP
+status:
+  loadBalancer: {}

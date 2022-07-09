@@ -14,5 +14,5 @@ spec:
         backend:
           service:
             name: redmine3
-            port:
-              number: 8080
+          service:
+            port: redmine3

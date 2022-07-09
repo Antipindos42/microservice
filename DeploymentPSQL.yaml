@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: my-bd
+  template:
+    metadata:
+      labels:
+        app: my-bd
+  spec:
+  containers:
+    - name: postgres
+      image: postgres:10.13
+      imagePullPolicy: "IfNotPresent"
+      ports:
+        - containerPort: 5432
+  env:
+    - name: POSTGRES_USER
+      value: postgres
+    - name: POSTGRES_PASSWORD
+    valueFrom:
+    secretKeyRef:
+    name: my-secret
+    key: key1
+    - name: PGDATA
+      value: /var/lib/postgresql/data/pgdata
+      volumeMounts:
+        - name: postgredb
+          mountPath: /var/lib/postgresql/data
+          volumes:
+            - name: postgredb
+              persistentVolumeClaim:
+                claimName: postgres
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ceph-hdd-ms1
+

@@ -32,7 +32,7 @@ spec:
     - name: database
       value: /var/lib/postgresql/data/redmi_nedatabase
       volumeMounts:
-        - name: postgredb
+        - name: PGDATA
           mountPath: /var/lib/postgresql/data
           volumes:
             - name: postgredb

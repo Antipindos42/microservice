@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redmine
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: my-app-redmine
+  template:
+    metadata:
+      labels:
+        app: my-app-redmine
+   spec:
+     containers:
+     - env:
+       - name: REDMINE_DB_POSTGRESS
+         value: database
+       - name: REDMINE_DB_USERNAME
+         value: posgres
+       - name: REDMINE_DB_PASSWORD
+       valueFrom: 
+       secretKeyRef:
+       name: my-secret
+       key: key1
+       - name: REDMINE_DB_DATABASE
+         value: PGDATA
+       - name: REDMINE_SECRET_KEY_BASE
+       valueFrom:
+       secretKeyRef:
+       name: my-secret-key-base
+       key: key2
+       - name: REDMINE_NO_DB_MIGRATE
+         value: "1"
+       image: redmine:4.1.1
+       name: redmine3
+       ports:
+       - containerPort: 3000
+       resources:
+         requests:
+           memory: "64Mi"
+           cpu: "150m"
+         limits:
+           memory: "328Mi"
+           cpu: "250m"
+       readinessProbe:
+         httpGet:
+           path: /account/register
+           port: 3000
+         initialDelaySeconds: 60
+         timeoutSeconds: 15
+         periodSeconds: 15
+       livenessProbe:
+         httpGet:
+           path: /account/register
+           port: 3000
+           scheme: HTTP
+         initialDelaySeconds: 60
+         timeoutSeconds: 15
+       - name: PGDATA
+       value: /var/lib/postgresql/data/pgdata
+       volumeMounts:
+         - name: postgredb
+           mountPath: /var/lib/postgresql/data
+           volumes:
+             - name: postgredb
+               persistentVolumeClaim:
+                 claimName: postgres
+status: {} 

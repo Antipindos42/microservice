@@ -29,8 +29,8 @@ spec:
     secretKeyRef:
     name: my-secret
     key: key1
-    - name: PGDATA
-      value: /var/lib/postgresql/data/pgdata
+    - name: database
+      value: /var/lib/postgresql/data/redmi_nedatabase
       volumeMounts:
         - name: postgredb
           mountPath: /var/lib/postgresql/data
@@ -38,17 +38,3 @@ spec:
             - name: postgredb
               persistentVolumeClaim:
                 claimName: postgres
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: ceph-hdd-ms1
-

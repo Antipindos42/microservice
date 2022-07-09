@@ -9,11 +9,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: my-app-redmine
+      app: redmine3
   template:
     metadata:
       labels:
-        app: my-app-redmine
+        app: redmine3
    spec:
      containers:
      - env:

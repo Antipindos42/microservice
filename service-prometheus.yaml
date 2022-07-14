@@ -1,20 +1,17 @@
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: prometheus
-  labels:
-    app: prometheus
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port:   '9090'
+  
 spec:
-  clusterIP: None
-  ports:
-    - name: amqp
-      protocol: TCP
-      port: 9090
-      targetPort: 9090
-    - name: admin
-      protocol: TCP
-      port: 8080
-      targetPort: 8080
-  selector:
+  selector: 
     app: prometheus
+  type: NodePort  
+  ports:
+    - port: 8080
+      targetPort: 9090 
+     
